@@ -61,4 +61,12 @@ public class Project{
         this.imageUrl = imageUrl;
     }
 
+    @Override
+    public String toString() {
+        return "Project{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", description='" + description + '\'' +
+            '}';
+    }
 }
