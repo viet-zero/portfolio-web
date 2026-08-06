@@ -1,7 +1,8 @@
 package com.portfolio.ui;
 
 import com.portfolio.entity.Project;
-import com.portfolio.service.ProjectService; 
+import com.portfolio.service.ProjectServiceImpl;
+import com.portfolio.service.ProjectService;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
@@ -11,7 +12,7 @@ public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
 
     public ConsoleUI(){
-        projectService = new ProjectService();
+        projectService = new ProjectServiceImpl();
     }
     public void showMenu(){
         System.out.println();
@@ -93,8 +94,17 @@ public class ConsoleUI {
 
         Project project = new Project(id, title, description, githubUrl, demoUrl, imageUrl);
 
-        this.projectService.addProject(project);
-        System.out.println("\nProject added successfully!");
+        try {
+
+            projectService.addProject(project);
+
+            System.out.println("Thêm Project thành công!");
+
+        } catch (IllegalArgumentException e) {
+
+            System.out.println(e.getMessage());
+
+        }
 
     }
 }
