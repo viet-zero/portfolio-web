@@ -4,9 +4,14 @@ import com.portfolio.entity.Project;
 import java.util.ArrayList;
 import java.util.List;
 import com.portfolio.validation.ProjectValidator;
+import com.portfolio.repository.ProjectRepository;;
 
 public class ProjectServiceImpl implements ProjectService  {
-    private List<Project> projects = new ArrayList<>();
+    private final ProjectRepository projectRepository;
+    
+    public ProjectServiceImpl(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
     @Override
     public void addProject(Project project) {
 
@@ -16,13 +21,14 @@ public class ProjectServiceImpl implements ProjectService  {
             throw new IllegalArgumentException("ID đã tồn tại.");
         }
 
-        projects.add(project);
+        projectRepository.save(project);
     }
     public List<Project> getAllProjects(){
-        return projects;
+        return projectRepository.findAll();
     }
     @Override
     public void showProjects(){
+        List<Project> projects = projectRepository.findAll();
         if (projects.isEmpty()) {
             System.out.println("Danh sách dự án đang trống.");
             return;
@@ -33,22 +39,12 @@ public class ProjectServiceImpl implements ProjectService  {
         }
     }
     @Override
-    public Project findProjectById(Long id){
-        for(Project project : projects){
-            if(project.getId().equals(id)){
-                return project;
-            }
-        }
-        return null;
+    public Project findProjectById(Long id) {
+        return projectRepository.findById(id);
     }
     @Override
-    public boolean removeProjectById(Long Id){
-        Project projectToRemove = findProjectById(Id);
-        if(projectToRemove != null){
-            projects.remove(projectToRemove);
-            return true;
-        }
-        return false;
+    public boolean removeProjectById(Long id) {
+        return projectRepository.deleteById(id);
     }
     public boolean updateProject(Long Id,
                                  String nTitle,

@@ -1,7 +1,6 @@
 package com.portfolio.ui;
 
 import com.portfolio.entity.Project;
-import com.portfolio.service.ProjectServiceImpl;
 import com.portfolio.service.ProjectService;
 import java.util.Scanner;
 import java.util.InputMismatchException;
@@ -11,9 +10,9 @@ public class ConsoleUI {
     private final ProjectService projectService;
     private final Scanner scanner = new Scanner(System.in);
 
-    public ConsoleUI(){
-        projectService = new ProjectServiceImpl();
-    }
+    public ConsoleUI(ProjectService projectService) {
+        this.projectService = projectService;
+    }   
     public void showMenu(){
         System.out.println();
         System.out.println("========== PORTFOLIO ==========");
