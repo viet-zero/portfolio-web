@@ -1,11 +1,23 @@
 package com.portfolio.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "projects")
 public class Project{
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String description;
+    @Column(name = "githup_url")
     private String githubUrl;
+    @Column(name = "demo_url")
     private String demoUrl;
+    @Column(name = "image_url")
     private String imageUrl;
     
     public Project() {
