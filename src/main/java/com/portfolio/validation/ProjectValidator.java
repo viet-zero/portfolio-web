@@ -4,7 +4,7 @@ import com.portfolio.entity.Project;
 
 public class ProjectValidator {
 
-    public static void isValid(Project project){
+    public static void validate(Project project){
 
         if(project.getId() <= 0){
             throw new IllegalArgumentException("ID phải lớn hơn 0.");
