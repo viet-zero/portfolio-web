@@ -6,6 +6,9 @@ import com.portfolio.validation.ProjectValidator;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -24,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project findProjectById(Long id) {
-        return projectRepository.findById(id). orElse(null);
+        return projectRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -51,10 +54,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean removeProjectById(Long id) {
-        if(!projectRepository.existsById(id)) {
+
+        if (!projectRepository.existsById(id)) {
             return false;
         }
+
         projectRepository.deleteById(id);
+
         return true;
     }
 }

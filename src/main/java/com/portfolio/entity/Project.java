@@ -13,7 +13,7 @@ public class Project{
     private String title;
     @Column(nullable = false)
     private String description;
-    @Column(name = "githup_url")
+    @Column(name = "github_url")
     private String githubUrl;
     @Column(name = "demo_url")
     private String demoUrl;
