@@ -23,12 +23,10 @@ public class MemoryProjectRepository implements ProjectRepository {
         return projects;
     }
     @Override
-    public boolean deleteById(long id){
+    public  deleteById(long id){
         Project xProject =findById(id);
         if(xProject!=null) {
-            projects.remove(id);
-            return true;
+            projects.remove(xProject);
         }
-        return false;
     }
 }

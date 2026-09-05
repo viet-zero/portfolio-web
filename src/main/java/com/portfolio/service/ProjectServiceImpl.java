@@ -19,10 +19,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         ProjectValidator.validate(project);
 
-        if (findProjectById(project.getId()) != null) {
-            throw new IllegalArgumentException("ID đã tồn tại.");
-        }
-
         projectRepository.save(project);
     }
 
