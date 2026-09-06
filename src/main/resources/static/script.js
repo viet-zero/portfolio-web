@@ -25,6 +25,10 @@ async function loadProjects() {
 
             <br>
 
+            <button onclick="editProject(${project.id})">
+                sửa
+            </button>
+
             <button onclick="deleteProject(${project.id})">
                 Xóa
             </button>
@@ -86,6 +90,49 @@ async function deleteProject(id) {
 
     loadProjects();
 }
+async function editProject(id){
+    const response = await fetch(`/api/projects/${id}`);
+    if(!response.ok){
+        alert("Không tìm thấy dự án với ID:"+id);
+        return;
+    }
+    const project = await response.json();
+     //lấy data cũ
+    const title = prompt("Tên project:", project.title);
+    const description = prompt("Mô tả:", project.description);
+    const githubUrl = prompt("GitHub URL:", project.githubUrl || "");
+    const demoUrl = prompt("Demo URL:", project.demoUrl || "");
+    const imageUrl = prompt("Image URL:", project.imageUrl || "");
+
+    if (title === null || description === null) {
+        return;
+    }
+    const updatedProject = {
+        title: title,
+        description: description,
+        githubUrl: githubUrl,
+        demoUrl: demoUrl,
+        imageUrl: imageUrl
+    };
+
+    const updateResponse = await fetch(`/api/projects/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedProject)
+    });
+
+    if (!updateResponse.ok) {
+        alert("Sửa project thất bại!");
+        return;
+    }
+
+    alert("Sửa project thành công!");
+
+    loadProjects();
+}
+        
 
 
 loadProjects();
