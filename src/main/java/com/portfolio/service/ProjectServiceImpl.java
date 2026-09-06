@@ -63,4 +63,23 @@ public class ProjectServiceImpl implements ProjectService {
 
         return true;
     }
+
+    @Override 
+    public Project updateProject(Long id, Project project){
+        Project existingProject = projectRepository.findById(id).orElse(null);
+        if(existingProject == null){
+            return null;
+        }else{
+            ProjectValidator.validate(project);
+            existingProject.setTitle(project.getTitle());
+            existingProject.setDescription(project.getDescription());
+            existingProject.setGithubUrl(project.getGithubUrl());
+            existingProject.setDemoUrl(project.getDemoUrl());
+            existingProject.setImageUrl(project.getImageUrl());
+
+            return projectRepository.save(existingProject);
+        }
+
+    }
+
 }

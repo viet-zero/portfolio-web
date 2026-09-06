@@ -5,6 +5,9 @@ import com.portfolio.service.ProjectService;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController 
 @RequestMapping ("/api/projects")
@@ -34,4 +37,11 @@ public class ProjectController {
     public boolean removeProjectById(@PathVariable Long id) {
         return projectService.removeProjectById(id);
     } 
+
+    @GetMapping("/{id}")
+    public Project updateProject(@PathVariable Long id, @RequestBody Project project) {
+
+        return projectService.updateProject(id, project);
+    }
+    
 }

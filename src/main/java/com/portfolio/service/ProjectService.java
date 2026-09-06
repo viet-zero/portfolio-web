@@ -15,4 +15,6 @@ public interface ProjectService {
     boolean removeProjectById(Long id);
 
     void showProjects();
+    
+    Project updateProject(Long id, Project project);
 }

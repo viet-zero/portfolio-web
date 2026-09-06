@@ -6,7 +6,7 @@ public class ProjectValidator {
 
     public static void validate(Project project){
 
-        if(project.getId() <= 0){
+        if(project.getId() != null && project.getId()<=0){
             throw new IllegalArgumentException("ID phải lớn hơn 0.");
         }
 
