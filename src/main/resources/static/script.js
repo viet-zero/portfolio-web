@@ -2,6 +2,11 @@ async function loadProjects() {
 
     const response = await fetch("/api/projects");
 
+    if (!response.ok) {
+        alert("Không thể tải danh sách project!");
+        return;
+    }
+
     const projects = await response.json();
 
     const container = document.getElementById("projects");
@@ -10,45 +15,47 @@ async function loadProjects() {
 
     projects.forEach(project => {
 
-        const div = document.createElement("div");
+        container.innerHTML += `
 
-        div.innerHTML = `
-            <h2>${project.title}</h2>
+            <div class="project-card">
 
-            <p>${project.description}</p>
+                <h3>${project.title}</h3>
 
-            <p>ID: ${project.id}</p>
+                <p>${project.description}</p>
 
-            <a href="${project.githubUrl}" target="_blank">
-                GitHub
-            </a>
+                <p>ID: ${project.id}</p>
 
-            <br>
+                <a href="${project.githubUrl || "#"}"
+                   target="_blank">
+                    GitHub
+                </a>
 
-            <button onclick="editProject(${project.id})">
-                sửa
-            </button>
+                <br>
 
-            <button onclick="deleteProject(${project.id})">
-                Xóa
-            </button>
+                <a href="${project.demoUrl || "#"}"
+                   target="_blank">
+                    Demo
+                </a>
 
-            <hr>
+                <div class="project-actions">
+
+                    <button onclick="editProject(${project.id})">
+                        Sửa
+                    </button>
+
+                    <button onclick="deleteProject(${project.id})">
+                        Xóa
+                    </button>
+
+                </div>
+
+            </div>
         `;
-
-        container.appendChild(div);
     });
 }
+async function saveProject() {
 
-
-function showAddForm() {
-
-    document.getElementById("addForm").style.display = "block";
-
-}
-
-
-async function addProject() {
+    const id = document.getElementById("projectId").value;
 
     const project = {
 
@@ -61,78 +68,150 @@ async function addProject() {
         demoUrl: document.getElementById("demoUrl").value,
 
         imageUrl: document.getElementById("imageUrl").value
-
     };
 
-    await fetch("/api/projects", {
 
-        method: "POST",
+    let response;
 
-        headers: {
-            "Content-Type": "application/json"
-        },
 
-        body: JSON.stringify(project)
+    // Không có ID → THÊM
+    if (id === "") {
 
-    });
+        response = await fetch("/api/projects", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(project)
+        });
+
+    }
+
+    // Có ID → SỬA
+    else {
+
+        response = await fetch(`/api/projects/${id}`, {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(project)
+        });
+    }
+
+
+    if (!response.ok) {
+
+        alert("Thao tác thất bại!");
+
+        return;
+    }
+
+
+    alert(
+        id === ""
+            ? "Thêm project thành công!"
+            : "Sửa project thành công!"
+    );
+
+
+    clearForm();
 
     loadProjects();
 }
+async function editProject(id) {
+
+    const response = await fetch(`/api/projects/${id}`);
+
+    if (!response.ok) {
+
+        alert("Không tìm thấy project!");
+
+        return;
+    }
 
 
+    const project = await response.json();
+
+
+    document.getElementById("projectId").value = project.id;
+
+    document.getElementById("title").value =
+        project.title;
+
+    document.getElementById("description").value =
+        project.description;
+
+    document.getElementById("githubUrl").value =
+        project.githubUrl || "";
+
+    document.getElementById("demoUrl").value =
+        project.demoUrl || "";
+
+    document.getElementById("imageUrl").value =
+        project.imageUrl || "";
+
+
+    document.getElementById("formTitle").innerText =
+        "Sửa Project";
+}
 async function deleteProject(id) {
 
-    await fetch(`/api/projects/${id}`, {
+    const confirmDelete =
+        confirm("Bạn có chắc muốn xóa project này không?");
 
-        method: "DELETE"
 
-    });
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    const response = await fetch(
+        `/api/projects/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+
+
+    if (!response.ok) {
+
+        alert("Xóa project thất bại!");
+
+        return;
+    }
+
+
+    alert("Xóa project thành công!");
+
 
     loadProjects();
 }
-async function editProject(id){
-    const response = await fetch(`/api/projects/${id}`);
-    if(!response.ok){
-        alert("Không tìm thấy dự án với ID:"+id);
-        return;
-    }
-    const project = await response.json();
-     //lấy data cũ
-    const title = prompt("Tên project:", project.title);
-    const description = prompt("Mô tả:", project.description);
-    const githubUrl = prompt("GitHub URL:", project.githubUrl || "");
-    const demoUrl = prompt("Demo URL:", project.demoUrl || "");
-    const imageUrl = prompt("Image URL:", project.imageUrl || "");
+function cancelEdit() {
 
-    if (title === null || description === null) {
-        return;
-    }
-    const updatedProject = {
-        title: title,
-        description: description,
-        githubUrl: githubUrl,
-        demoUrl: demoUrl,
-        imageUrl: imageUrl
-    };
-
-    const updateResponse = await fetch(`/api/projects/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(updatedProject)
-    });
-
-    if (!updateResponse.ok) {
-        alert("Sửa project thất bại!");
-        return;
-    }
-
-    alert("Sửa project thành công!");
-
-    loadProjects();
+    clearForm();
 }
-        
+function clearForm() {
 
+    document.getElementById("projectId").value = "";
 
+    document.getElementById("title").value = "";
+
+    document.getElementById("description").value = "";
+
+    document.getElementById("githubUrl").value = "";
+
+    document.getElementById("demoUrl").value = "";
+
+    document.getElementById("imageUrl").value = "";
+
+    document.getElementById("formTitle").innerText =
+        "Thêm Project";
+}
 loadProjects();

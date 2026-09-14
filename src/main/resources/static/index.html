@@ -2,33 +2,83 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Portfolio</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>My Projects</h1>
+    <header>
+        <h1>My Portfolio</h1>
+        <p>Danh sách các dự án của tôi</p>
+    </header>
 
-<button onclick="showAddForm()">Thêm Project</button>
 
-<div id="addForm" style="display: none;">
+    <main>
 
-    <input id="title" placeholder="Tên project">
-    <input id="description" placeholder="Mô tả">
-    <input id="githubUrl" placeholder="GitHub URL">
-    <input id="demoUrl" placeholder="Demo URL">
-    <input id="imageUrl" placeholder="Image URL">
+        <!-- KHU VỰC THÊM / SỬA -->
+        <section class="project-form">
 
-    <button onclick="addProject()">Lưu</button>
+            <h2 id="formTitle">Thêm Project</h2>
 
-</div>
+            <input type="hidden" id="projectId">
 
-<hr>
+            <input
+                type="text"
+                id="title"
+                placeholder="Tên project"
+            >
 
-<div id="projects"></div>
+            <textarea
+                id="description"
+                placeholder="Mô tả project"
+            ></textarea>
 
-<script src="script.js"></script>
+            <input
+                type="text"
+                id="githubUrl"
+                placeholder="GitHub URL"
+            >
+
+            <input
+                type="text"
+                id="demoUrl"
+                placeholder="Demo URL"
+            >
+
+            <input
+                type="text"
+                id="imageUrl"
+                placeholder="Image URL"
+            >
+
+            <button onclick="saveProject()">
+                Lưu Project
+            </button>
+
+            <button onclick="cancelEdit()">
+                Hủy
+            </button>
+
+        </section>
+
+
+        <!-- DANH SÁCH PROJECT -->
+        <section>
+
+            <h2>Projects</h2>
+
+            <div id="projects"></div>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
 
 </body>
 </html>
